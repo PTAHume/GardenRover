@@ -1,4 +1,6 @@
-﻿namespace GardenRover
+﻿
+
+namespace GardenRover
 {
     using Interfaces;
     using System;
@@ -12,11 +14,21 @@
         public Mower(ICoordinates startingLocation, string initialHeading, ICoordinates initialBoundary)
         {
             Location = startingLocation;
-            Heading = Enum.Parse<Facing>(initialHeading, true);
             Boundary = initialBoundary;
+            if (!Enum.TryParse<Facing>(initialHeading, true, out Facing heading))
+            {
+                throw new ArgumentException("Mower direction parameter is invalid");
+            }
+
+            Heading = heading;
             if (Location.XAxis > Boundary.XAxis || Location.YAxis > Boundary.YAxis)
             {
                 throw new ArgumentException("Mower location is outside of the boundary");
+            }
+
+            if (!new CustomerValidator().Validate(Location as Coordinates).IsValid)
+            {
+                throw new ArgumentException("Mower location parameter is invalid");
             }
         }
 
@@ -30,9 +42,14 @@
                 return;
             }
 
-            foreach (string order in orders)
+            foreach (string orderItem in orders)
             {
-                switch (Enum.Parse<Orders>(order, true))
+                if (!Enum.TryParse<Orders>(orderItem, true, out Orders order))
+                {
+                    throw new ArgumentException("Command is invalid");
+                }
+
+                switch (order)
                 {
                     case Orders.L:
                         Heading = ((int)Heading) - 1 < 0 ? Facing.W : Heading - 1;

@@ -6,8 +6,8 @@
     {
         public CustomerValidator()
         {
-            RuleFor(coordinates => coordinates.XAxis).GreaterThan(0);
-            RuleFor(coordinates => coordinates.YAxis).GreaterThan(0);
+            RuleFor(coordinates => coordinates.XAxis).GreaterThanOrEqualTo(0);
+            RuleFor(coordinates => coordinates.YAxis).GreaterThanOrEqualTo(0);
         }
     }
 }

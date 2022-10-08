@@ -115,12 +115,52 @@ namespace GardenRover.Tests
         }
 
         [Test]
-        public void CanHandleBadCommands()
+        public void CanHandleBadOutOfBoundsSetup()
         {
+            //assert 
             Assert.Throws<ArgumentException>(code: () => new Mower(
                 startingLocation: new Coordinates(xAxis: 10, yAxis: 10),
                 initialHeading: "N", initialBoundary: new Coordinates(xAxis: 5, yAxis: 5)));
 
         }
+
+        [Test]
+        public void CanHandleBadStartLocation()
+        {
+
+            //assert 
+            Assert.Throws<ArgumentException>(code: () => new Mower(
+                startingLocation: new Coordinates(xAxis: -10, yAxis: -10),
+                initialHeading: "N", initialBoundary: new Coordinates(xAxis: -7, yAxis: -7)));
+
+        }
+
+        [Test]
+        public void CanHandleBadCommands()
+        {
+            //arrange
+            ICoordinates startingLocation = new Coordinates(3, 3);
+            const string initialHeading = "W";
+            ICoordinates initialBoundary = new Coordinates(5, 5);
+
+            //act
+            IMower mower = new Mower(startingLocation, initialHeading, initialBoundary);
+
+
+            //assert
+            Assert.Throws<ArgumentException>(code: () => mower.Command(new string[] { "X", "M" }));
+        }
+
+        [Test]
+        public void CanHandleBadDirection()
+        {
+
+            //assert 
+            Assert.Throws<ArgumentException>(code: () => new Mower(
+                startingLocation: new Coordinates(xAxis: 5, yAxis: 5),
+                initialHeading: "X", initialBoundary: new Coordinates(xAxis: 10, yAxis: 10)));
+
+        }
+
     }
 }
